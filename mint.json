@@ -51,9 +51,8 @@
         "essentials/payments",
         "essentials/background-jobs",
         "essentials/emails",
-        "essentials/user-analytics",
-        "essentials/support",
-        "essentials/error-tracking"
+        "essentials/error-tracking",
+        "essentials/user-analytics"
       ]
     }
   ],
