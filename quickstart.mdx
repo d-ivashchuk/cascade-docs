@@ -1,86 +1,115 @@
 ---
-title: 'Quickstart'
-description: 'Start building awesome documentation in under 5 minutes'
+title: "Quickstart"
+description: "Start developing locally in 5 minutes"
 ---
 
-## Setup your development
+## Get started with core of Cascade
 
-Learn how to update your docs locally and and deploy them to the public.
-
-### Edit and preview
+Cascade relies on Prisma for database management and Postgres for data storage. This guide will help you set up a local development environment with a Postgres database.
 
 <AccordionGroup>
-  <Accordion icon="github" title="Clone your docs locally">
-    During the onboarding process, we created a repository on your Github with
-    your docs content. You can find this repository on our
-    [dashboard](https://dashboard.mintlify.com). To clone the repository
-    locally, follow these
-    [instructions](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository)
-    in your terminal.
-  </Accordion>
-  <Accordion icon="rectangle-terminal" title="Preview changes">
-    Previewing helps you make sure your changes look as intended. We built a
-    command line interface to render these changes locally. 1. Install the
-    [Mintlify CLI](https://www.npmjs.com/package/mintlify) to preview the
-    documentation changes locally with this command: ``` npm i -g mintlify ```
-    2. Run the following command at the root of your documentation (where
-    `mint.json` is): ``` mintlify dev ```
+  <Accordion icon="database" title="Alternative databases">
+    You can easily replace Posgres with other databases supported by Prisma.
+    Check out the Prisma documentation for more information.
   </Accordion>
 </AccordionGroup>
 
-### Deploy your changes
+Clone the repo:
+
+```bash
+git clone https://github.com/d-ivashchuk/cascade.git
+```
+
+Spin up Postgres in docker headless mode.
+
+```bash
+docker compose up -d
+```
 
 <AccordionGroup>
-
-<Accordion icon="message-bot" title="Install our Github app">
-  Our Github app automatically deploys your changes to your docs site, so you
-  don't need to manage deployments yourself. You can find the link to install on
-  your [dashboard](https://dashboard.mintlify.com). Once the bot has been
-  successfully installed, there should be a check mark next to the commit hash
-  of the repo.
-</Accordion>
-<Accordion icon="rocket" title="Push your changes">
-  [Commit and push your changes to
-  Git](https://docs.github.com/en/get-started/using-git/pushing-commits-to-a-remote-repository#about-git-push)
-  for your changes to update in your docs site. If you push and don't see that
-  the Github app successfully deployed your changes, you can also manually
-  update your docs through our [dashboard](https://dashboard.mintlify.com).
-</Accordion>
-
+  <Accordion icon="database" title="Setup with existing Postgres">
+    If you are using hosted Postgres, you can skip the docker step and populate
+    the connection string in the `.env` file with your existing database URL.
+  </Accordion>
 </AccordionGroup>
 
-## Update your docs
+Copy env variables from the example:
 
-Add content directly in your files with MDX syntax and React components. You can use any of our components, or even build your own.
+```bash
+cp .example.env .env
+```
 
-<CardGroup>
+Be sure to populate database urls; at this stage, they are the most important thing to get started locally:
 
-<Card title="Style Your Docs" icon="paintbrush" href="/settings/global">
-  Add flair to your docs with personalized branding.
-</Card>
+```.env
+POSTGRES_PRISMA_URL="postgresql://admin:admin@localhost:5432/cascade_db"
+POSTGRES_URL_NON_POOLING="postgresql://admin:admin@localhost:5432/cascade_db"
+```
 
-<Card
-  title="Add API Endpoints"
-  icon="square-code"
-  href="/api-playground/configuration"
->
-  Implement your OpenAPI spec and enable API user interaction.
-</Card>
+Migrate Prisma & generate client:
 
-<Card
-  title="Integrate Analytics"
-  icon="chart-mixed"
-  href="/analytics/supported-integrations"
->
-  Draw insights from user interactions with your documentation.
-</Card>
+```
+npx prisma migrate dev
+```
 
-<Card
-  title="Host on a Custom Domain"
-  icon="browser"
-  href="/settings/custom-domain/subdomain"
->
-  Keep your docs on your own website's subdomain.
-</Card>
+Install dependencies & run application
 
-</CardGroup>
+```
+pnpm install && pnpm run dev
+```
+
+<AccordionGroup>
+  <Accordion
+    icon="database"
+    title="Populate test users for User Management table"
+  >
+  If you want to have some basic data to work with, you can populate the User table immediately by running the following command:
+
+```bash
+npx prisma db seed
+```
+
+    <Frame>
+      <img
+        src="/images/user-management.jpeg"
+        style={{ borderRadius: "0.5rem" }}
+      />
+    </Frame>
+
+  </Accordion>
+</AccordionGroup>
+
+## Add Discord authentication
+
+<Tip>
+
+This section is borrowed from the [T3 app documentation](https://create.t3.gg/en/usage/next-auth#setting-up-the-default-discordprovider) as Casdcade is basing on T3.
+
+</Tip>
+
+1. Head to [the Applications section in the Discord Developer Portal](https://discord.com/developers/applications), and click on "New Application"
+2. In the settings menu, go to "OAuth2 => General"
+
+- Copy the Client ID and paste it in `DISCORD_CLIENT_ID` in `.env`.
+- Under Client Secret, click "Reset Secret" and copy that string to `DISCORD_CLIENT_SECRET` in `.env`. Be careful as you won't be able to see this secret again, and resetting it will cause the existing one to expire.
+- Click "Add Redirect" and paste in `<app url>/api/auth/callback/discord` (example for local development: <code class="break-all">http://localhost:3000/api/auth/callback/discord</code>)
+- Save your changes
+- It is possible, but not recommended, to use the same Discord Application for both development and production. You could also consider [Mocking the Provider](https://github.com/trpc/trpc/blob/main/examples/next-prisma-websockets-starter/src/pages/api/auth/%5B...nextauth%5D.ts) during development.
+
+## Sign in into the application
+
+Head to the login page(`http://localhost:3000`) and click on the Discord button to sign in with your Discord account.
+
+{" "}
+
+<Frame>
+  <img src="/images/login.jpeg" style={{ borderRadius: "0.5rem" }} />
+</Frame>
+
+<Tip>
+
+Cascade relies on roles to manage user permissions. By default, the user is assigned the `USER` role. You can change the role in the database by updating the `role` field in the `User` table.
+
+You need to change your user role to `SUPER_ADMIN` to get access to all features
+
+</Tip>

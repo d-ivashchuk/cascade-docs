@@ -7,12 +7,12 @@
   },
   "favicon": "/favicon.svg",
   "colors": {
-    "primary": "#0D9373",
-    "light": "#07C983",
-    "dark": "#0D9373",
+    "primary": "#757575",
+    "light": "#BDBDBD",
+    "dark": "#494949",
     "anchors": {
-      "from": "#0D9373",
-      "to": "#07C983"
+      "from": "#757575",
+      "to": "#BDBDBD"
     }
   },
   "topbarLinks": [
@@ -41,34 +41,24 @@
   "navigation": [
     {
       "group": "Get Started",
-      "pages": ["introduction", "quickstart", "development"]
+      "pages": ["introduction", "quickstart"]
     },
     {
       "group": "Essentials",
       "pages": [
-        "essentials/markdown",
-        "essentials/code",
-        "essentials/images",
-        "essentials/settings",
-        "essentials/navigation",
-        "essentials/reusable-snippets"
-      ]
-    },
-    {
-      "group": "API Documentation",
-      "pages": ["api-reference/introduction"]
-    },
-    {
-      "group": "Endpoint Examples",
-      "pages": [
-        "api-reference/endpoint/get",
-        "api-reference/endpoint/create",
-        "api-reference/endpoint/delete"
+        "essentials/database",
+        "essentials/authentication",
+        "essentials/payments",
+        "essentials/background-jobs",
+        "essentials/emails",
+        "essentials/user-analytics",
+        "essentials/support",
+        "essentials/error-tracking"
       ]
     }
   ],
   "footerSocials": {
-    "twitter": "https://twitter.com/_divdev",
+    "twitter": "https://twitter.com/divdev_",
     "github": "https://github.com/d-ivashchuk/cascade"
   }
 }
