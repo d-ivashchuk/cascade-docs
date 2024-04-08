@@ -54,6 +54,10 @@
         "essentials/error-tracking",
         "essentials/user-analytics"
       ]
+    },
+    {
+      "group": "Marketing",
+      "pages": ["marketing/SEO", "marketing/blog", "marketing/newsletter"]
     }
   ],
   "footerSocials": {
